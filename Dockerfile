@@ -28,7 +28,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ .
 
 # Frontend-Build aus Stage 1 ins Backend einbinden
-COPY --from=frontend-builder /frontend/dist ./static/frontend
+# outDir in vite.config.ts: '../backend/static/frontend' → im Container: /backend/static/frontend
+COPY --from=frontend-builder /backend/static/frontend ./static/frontend
 
 # Runtime-Verzeichnisse anlegen
 RUN mkdir -p /var/lib/vehicle-service/db \
