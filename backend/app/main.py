@@ -81,7 +81,8 @@ upload_path.mkdir(parents=True, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=str(upload_path)), name="uploads")
 
 # Static files for frontend (only if the directory exists)
-frontend_path = Path(__file__).parent.parent.parent / "frontend" / "dist"
+# Im Container: WORKDIR=/app, Frontend liegt in /app/static/frontend
+frontend_path = Path(__file__).parent.parent / "static" / "frontend"
 if frontend_path.exists() and frontend_path.is_dir():
     app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
 
