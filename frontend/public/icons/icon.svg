@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="24" fill="#0f172a"/>
+  <!-- Wrench icon -->
+  <g fill="#f59e0b">
+    <!-- Car body -->
+    <rect x="28" y="90" width="136" height="52" rx="8" fill="#f59e0b"/>
+    <!-- Car roof -->
+    <path d="M55 90 L70 58 L122 58 L137 90 Z" fill="#f59e0b"/>
+    <!-- Windows -->
+    <rect x="72" y="64" width="20" height="20" rx="3" fill="#0f172a"/>
+    <rect x="100" y="64" width="20" height="20" rx="3" fill="#0f172a"/>
+    <!-- Wheels -->
+    <circle cx="62" cy="142" r="18" fill="#1e293b" stroke="#f59e0b" stroke-width="4"/>
+    <circle cx="130" cy="142" r="18" fill="#1e293b" stroke="#f59e0b" stroke-width="4"/>
+    <circle cx="62" cy="142" r="6" fill="#f59e0b"/>
+    <circle cx="130" cy="142" r="6" fill="#f59e0b"/>
+    <!-- Wrench overlay -->
+    <g transform="translate(120, 28) rotate(45)">
+      <rect x="-5" y="-28" width="10" height="36" rx="3" fill="#f97316"/>
+      <circle cx="0" cy="10" r="12" fill="none" stroke="#f97316" stroke-width="6"/>
+    </g>
+  </g>
+</svg>

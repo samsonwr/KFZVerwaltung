@@ -1,0 +1,26 @@
+[Unit]
+Description=KFZ Verwaltung Service
+Documentation=https://github.com/kfzverwaltung
+After=network.target
+
+[Service]
+Type=simple
+User=vehicle-service
+Group=vehicle-service
+WorkingDirectory=/opt/vehicle-service/backend
+EnvironmentFile=/opt/vehicle-service/backend/.env
+ExecStart=/opt/vehicle-service/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 5000 --workers 1
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kfz-verwaltung
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/vehicle-service /var/backups/vehicle-service
+
+[Install]
+WantedBy=multi-user.target

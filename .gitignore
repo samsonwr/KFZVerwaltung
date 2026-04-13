@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+!.env.example
+
+# SQLite DB
+*.db
+*.db-shm
+*.db-wal
+
+# Uploads & Backups (runtime data)
+backend/uploads/
+backend/static/frontend/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Vite
+frontend/.vite/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Alembic (nur Versionen tracken, nicht cache)
+backend/alembic/__pycache__/
