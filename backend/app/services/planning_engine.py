@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.models.planned_service import PlannedService
@@ -35,6 +35,57 @@ def get_task_name_for_planned(planned: PlannedService, db: Session) -> str:
         if plan:
             return plan.task_name
     return "Wartung"
+
+
+def ensure_planned_service_for_plan(
+    plan: MaintenancePlan, vehicle: Vehicle, db: Session
+) -> None:
+    """
+    Stellt sicher dass ein pending PlannedService für diesen Wartungsplan existiert.
+    Wird beim Erstellen/Aktualisieren eines Wartungsplans aufgerufen.
+    """
+    if plan.interval_km is None and plan.interval_days is None:
+        return  # Kein Intervall definiert – nichts zu planen
+
+    existing: Optional[PlannedService] = (
+        db.query(PlannedService)
+        .filter(
+            PlannedService.maintenance_plan_id == plan.id,
+            PlannedService.status == "pending",
+        )
+        .first()
+    )
+    if existing:
+        # Bereits vorhanden – due_km/due_date neu berechnen falls Intervall geändert wurde
+        base_km = plan.last_done_km if plan.last_done_km is not None else vehicle.current_km
+        base_date = plan.last_done_date if plan.last_done_date is not None else date.today()
+        if plan.interval_km is not None:
+            existing.due_km = base_km + plan.interval_km
+        else:
+            existing.due_km = None
+        if plan.interval_days is not None:
+            existing.due_date = base_date + timedelta(days=plan.interval_days)
+        else:
+            existing.due_date = None
+        db.flush()
+        return
+
+    today = date.today()
+    base_km = plan.last_done_km if plan.last_done_km is not None else vehicle.current_km
+    base_date = plan.last_done_date if plan.last_done_date is not None else today
+
+    due_km = (base_km + plan.interval_km) if plan.interval_km is not None else None
+    due_date = (base_date + timedelta(days=plan.interval_days)) if plan.interval_days is not None else None
+
+    new_ps = PlannedService(
+        vehicle_id=plan.vehicle_id,
+        maintenance_plan_id=plan.id,
+        due_date=due_date,
+        due_km=due_km,
+        status="pending",
+    )
+    db.add(new_ps)
+    db.flush()
 
 
 def get_upcoming_services(db: Session, days: int = 60, km_threshold: int = 1000) -> list:

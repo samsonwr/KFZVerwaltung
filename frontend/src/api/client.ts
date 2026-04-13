@@ -6,6 +6,7 @@ import type {
   PlannedService,
   UpcomingService,
   DashboardSummary,
+  KmHistoryEntry,
 } from '../types'
 
 const http = axios.create({
@@ -29,8 +30,8 @@ export const vehicles = {
 
   delete: (id: number) => http.delete(`/vehicles/${id}`),
 
-  updateKm: (id: number, km: number) =>
-    http.post<Vehicle>(`/vehicles/${id}/km`, { km }).then((r) => r.data),
+  updateKm: (id: number, km: number, note?: string) =>
+    http.post<Vehicle>(`/vehicles/${id}/km`, { km, note }).then((r) => r.data),
 
   uploadPhoto: (id: number, file: File) => {
     const fd = new FormData()
@@ -105,6 +106,13 @@ export const services = {
     http.delete(`/services/${id}/photos/${encodeURIComponent(filename)}`),
 }
 
+// ── KM History ───────────────────────────────────────────────────────────────
+
+export const kmHistory = {
+  getByVehicle: (vehicleId: number) =>
+    http.get<KmHistoryEntry[]>(`/vehicles/${vehicleId}/km-history`).then((r) => r.data),
+}
+
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
 export const dashboard = {
@@ -142,5 +150,5 @@ export const exportApi = {
   getDashboardPdfUrl: () => `/api/v1/export/dashboard/pdf`,
 }
 
-const api = { vehicles, maintenancePlans, services, dashboard, planning, push, export: exportApi }
+const api = { vehicles, maintenancePlans, services, kmHistory, dashboard, planning, push, export: exportApi }
 export default api

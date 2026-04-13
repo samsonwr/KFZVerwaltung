@@ -68,6 +68,14 @@ export interface VehicleSummary {
   cost_ytd: number
 }
 
+export interface KmHistoryEntry {
+  id: number
+  vehicle_id: number
+  km: number
+  reported_at: string // ISO datetime
+  note?: string
+}
+
 export interface DashboardSummary {
   vehicles: VehicleSummary[]
   total_overdue: number

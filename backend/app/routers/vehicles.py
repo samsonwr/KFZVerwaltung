@@ -1,5 +1,6 @@
 import os
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List
 
@@ -9,7 +10,9 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.vehicle import Vehicle
+from app.models.km_history import KmHistory
 from app.schemas.vehicle import VehicleCreate, VehicleUpdate, VehicleResponse, VehicleKmUpdate
+from app.schemas.km_history import KmHistoryResponse
 from app.config import settings
 
 router = APIRouter(prefix="/vehicles", tags=["vehicles"])
@@ -76,9 +79,28 @@ def delete_vehicle(vehicle_id: int, db: Session = Depends(get_db)):
 def update_km(vehicle_id: int, payload: VehicleKmUpdate, db: Session = Depends(get_db)):
     vehicle = _get_vehicle_or_404(vehicle_id, db)
     vehicle.current_km = payload.km
+    entry = KmHistory(
+        vehicle_id=vehicle_id,
+        km=payload.km,
+        reported_at=datetime.now(timezone.utc),
+        note=payload.note,
+    )
+    db.add(entry)
     db.commit()
     db.refresh(vehicle)
     return vehicle
+
+
+@router.get("/{vehicle_id}/km-history", response_model=List[KmHistoryResponse])
+def get_km_history(vehicle_id: int, db: Session = Depends(get_db)):
+    _get_vehicle_or_404(vehicle_id, db)
+    return (
+        db.query(KmHistory)
+        .filter(KmHistory.vehicle_id == vehicle_id)
+        .order_by(KmHistory.reported_at.desc())
+        .limit(50)
+        .all()
+    )
 
 
 @router.post("/{vehicle_id}/photo", response_model=VehicleResponse)

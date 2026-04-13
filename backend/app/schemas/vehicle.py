@@ -35,3 +35,4 @@ class VehicleResponse(VehicleBase):
 
 class VehicleKmUpdate(BaseModel):
     km: int
+    note: str | None = None

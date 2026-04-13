@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from app.models.maintenance_plan import MaintenancePlan
     from app.models.service_record import ServiceRecord
     from app.models.planned_service import PlannedService
+    from app.models.km_history import KmHistory
 
 
 class Vehicle(Base):
@@ -36,4 +37,10 @@ class Vehicle(Base):
         "PlannedService",
         back_populates="vehicle",
         cascade="all, delete-orphan",
+    )
+    km_history: Mapped[List["KmHistory"]] = relationship(
+        "KmHistory",
+        back_populates="vehicle",
+        cascade="all, delete-orphan",
+        order_by="KmHistory.reported_at.desc()",
     )

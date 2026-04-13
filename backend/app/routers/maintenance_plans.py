@@ -11,6 +11,7 @@ from app.schemas.maintenance_plan import (
     MaintenancePlanUpdate,
     MaintenancePlanResponse,
 )
+from app.services.planning_engine import ensure_planned_service_for_plan
 
 router = APIRouter(tags=["maintenance-plans"])
 
@@ -54,9 +55,11 @@ def create_maintenance_plan(
     payload: MaintenancePlanCreate,
     db: Session = Depends(get_db),
 ):
-    _get_vehicle_or_404(vehicle_id, db)
+    vehicle = _get_vehicle_or_404(vehicle_id, db)
     plan = MaintenancePlan(vehicle_id=vehicle_id, **payload.model_dump())
     db.add(plan)
+    db.flush()  # ID vergeben ohne commit
+    ensure_planned_service_for_plan(plan, vehicle, db)
     db.commit()
     db.refresh(plan)
     return plan
@@ -72,10 +75,13 @@ def update_maintenance_plan(
     payload: MaintenancePlanUpdate,
     db: Session = Depends(get_db),
 ):
+    vehicle = _get_vehicle_or_404(vehicle_id, db)
     plan = _get_plan_or_404(plan_id, vehicle_id, db)
     update_data = payload.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(plan, key, value)
+    db.flush()
+    ensure_planned_service_for_plan(plan, vehicle, db)
     db.commit()
     db.refresh(plan)
     return plan

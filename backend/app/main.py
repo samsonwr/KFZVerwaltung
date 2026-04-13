@@ -15,6 +15,7 @@ import app.models.maintenance_plan  # noqa: F401
 import app.models.service_record  # noqa: F401
 import app.models.planned_service  # noqa: F401
 import app.models.push_subscription  # noqa: F401
+import app.models.km_history  # noqa: F401
 
 from app.routers import (
     vehicles,
