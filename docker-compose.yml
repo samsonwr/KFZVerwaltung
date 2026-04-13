@@ -10,8 +10,14 @@ services:
     volumes:
       - vehicle-data:/var/lib/vehicle-service
       - vehicle-backups:/var/backups/vehicle-service
-    env_file:
-      - ./backend/.env
+    environment:
+      - PORT=5000
+      - DB_PATH=/var/lib/vehicle-service/db/vehicles.db
+      - UPLOAD_PATH=/var/lib/vehicle-service/uploads
+      - BACKUP_PATH=/var/backups/vehicle-service
+      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY:-}
+      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY:-}
+      - VAPID_ADMIN_EMAIL=${VAPID_ADMIN_EMAIL:-admin@localhost}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/api/v1/dashboard/summary"]
