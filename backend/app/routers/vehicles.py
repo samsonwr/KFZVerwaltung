@@ -35,12 +35,12 @@ def _validate_image(file: UploadFile) -> str:
     return ext
 
 
-@router.get("/", response_model=List[VehicleResponse])
+@router.get("", response_model=List[VehicleResponse])
 def list_vehicles(db: Session = Depends(get_db)):
     return db.query(Vehicle).all()
 
 
-@router.post("/", response_model=VehicleResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=VehicleResponse, status_code=status.HTTP_201_CREATED)
 def create_vehicle(payload: VehicleCreate, db: Session = Depends(get_db)):
     vehicle = Vehicle(**payload.model_dump())
     db.add(vehicle)

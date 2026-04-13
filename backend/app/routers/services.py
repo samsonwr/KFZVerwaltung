@@ -35,7 +35,7 @@ def _validate_image_ext(filename: str) -> str:
     return ext
 
 
-@router.get("/", response_model=List[ServiceRecordResponse])
+@router.get("", response_model=List[ServiceRecordResponse])
 def list_service_records(
     vehicle_id: Optional[int] = Query(None),
     skip: int = Query(0, ge=0),
@@ -48,7 +48,7 @@ def list_service_records(
     return query.order_by(ServiceRecord.date.desc()).offset(skip).limit(limit).all()
 
 
-@router.post("/", response_model=ServiceRecordResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ServiceRecordResponse, status_code=status.HTTP_201_CREATED)
 def create_service_record(payload: ServiceRecordCreate, db: Session = Depends(get_db)):
     # Verify vehicle exists
     vehicle = db.get(Vehicle, payload.vehicle_id)
