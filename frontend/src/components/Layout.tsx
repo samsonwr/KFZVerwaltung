@@ -4,6 +4,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 const navItems = [
   { to: '/', label: 'Dashboard', icon: '&#9783;', exact: true },
   { to: '/vehicles', label: 'Fahrzeuge', icon: '&#128663;', exact: false },
+  { to: '/km', label: 'KM melden', icon: '&#128207;', exact: false },
   { to: '/services/new', label: 'Service +', icon: '&#128295;', exact: false },
   { to: '/planning', label: 'Planung', icon: '&#128197;', exact: false },
 ]

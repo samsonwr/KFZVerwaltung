@@ -8,6 +8,7 @@ import MaintenancePlans from './pages/MaintenancePlans'
 import ServiceNew from './pages/ServiceNew'
 import ServiceDetail from './pages/ServiceDetail'
 import Planning from './pages/Planning'
+import KmReport from './pages/KmReport'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/services/new" element={<ServiceNew />} />
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/planning" element={<Planning />} />
+            <Route path="/km" element={<KmReport />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
