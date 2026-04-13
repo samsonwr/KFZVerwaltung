@@ -30,11 +30,11 @@ export const vehicles = {
   delete: (id: number) => http.delete(`/vehicles/${id}`),
 
   updateKm: (id: number, km: number) =>
-    http.patch<Vehicle>(`/vehicles/${id}/km`, { current_km: km }).then((r) => r.data),
+    http.post<Vehicle>(`/vehicles/${id}/km`, { km }).then((r) => r.data),
 
   uploadPhoto: (id: number, file: File) => {
     const fd = new FormData()
-    fd.append('photo', file)
+    fd.append('file', file)
     return http
       .post<{ photo_path: string }>(`/vehicles/${id}/photo`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -109,7 +109,7 @@ export const services = {
 
 export const dashboard = {
   getSummary: () =>
-    http.get<DashboardSummary>('/dashboard').then((r) => r.data),
+    http.get<DashboardSummary>('/dashboard/summary').then((r) => r.data),
 }
 
 // ── Planning ──────────────────────────────────────────────────────────────────
