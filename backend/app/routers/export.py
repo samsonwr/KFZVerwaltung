@@ -9,7 +9,7 @@ from app.services.pdf_export import generate_vehicle_pdf, generate_dashboard_pdf
 router = APIRouter(prefix="/export", tags=["export"])
 
 
-@router.get("/vehicle/{vehicle_id}/pdf")
+@router.get("/vehicles/{vehicle_id}/pdf")
 def export_vehicle_pdf(vehicle_id: int, db: Session = Depends(get_db)):
     vehicle = db.get(Vehicle, vehicle_id)
     if vehicle is None:
