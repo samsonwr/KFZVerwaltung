@@ -60,7 +60,7 @@ export default function Layout() {
           className="text-slate-400 hover:text-slate-100 p-2"
           aria-label="Menu"
         >
-          {mobileOpen ? '&#10005;' : '&#9776;'}
+          {mobileOpen ? '✕' : '☰'}
         </button>
       </div>
 
