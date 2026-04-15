@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from sqlalchemy import text
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -36,8 +37,32 @@ async def lifespan(app: FastAPI):
     Path(settings.backup_path).mkdir(parents=True, exist_ok=True)
     Path(settings.db_path).parent.mkdir(parents=True, exist_ok=True)
 
-    # Datenbanktabellen anlegen (neue Spalten werden bei fresh install automatisch erstellt)
+    # Datenbanktabellen anlegen
     Base.metadata.create_all(bind=engine)
+
+    # Neue Spalten zu bestehenden Tabellen hinzufügen (sicher, ignoriert bereits vorhandene)
+    new_vehicle_columns = [
+        ("key_number", "VARCHAR"),
+        ("fuel_type", "VARCHAR"),
+        ("engine_oil_type", "VARCHAR"),
+        ("engine_oil_capacity", "FLOAT"),
+        ("gearbox_oil_type", "VARCHAR"),
+        ("gearbox_oil_capacity", "FLOAT"),
+        ("coolant_type", "VARCHAR"),
+        ("coolant_capacity", "FLOAT"),
+        ("brake_fluid_type", "VARCHAR"),
+        ("tire_size_summer", "VARCHAR"),
+        ("tire_size_winter", "VARCHAR"),
+        ("next_inspection_date", "VARCHAR"),
+        ("registration_doc_path", "VARCHAR"),
+    ]
+    with engine.connect() as conn:
+        for col_name, col_type in new_vehicle_columns:
+            try:
+                conn.execute(text(f"ALTER TABLE vehicles ADD COLUMN {col_name} {col_type}"))
+                conn.commit()
+            except Exception:
+                pass  # Spalte existiert bereits
 
     # Start background scheduler
     scheduler = create_scheduler(settings, SessionLocal)
