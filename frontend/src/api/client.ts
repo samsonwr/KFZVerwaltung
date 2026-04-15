@@ -37,7 +37,17 @@ export const vehicles = {
     const fd = new FormData()
     fd.append('file', file)
     return http
-      .post<{ photo_path: string }>(`/vehicles/${id}/photo`, fd, {
+      .post<Vehicle>(`/vehicles/${id}/photo`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((r) => r.data)
+  },
+
+  uploadRegistrationDoc: (id: number, file: File) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    return http
+      .post<Vehicle>(`/vehicles/${id}/registration-doc`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((r) => r.data)

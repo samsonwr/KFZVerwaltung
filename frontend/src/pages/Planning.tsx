@@ -12,7 +12,7 @@ function getPhotoUrl(path?: string): string | null {
 function UrgencyBadge({ item }: { item: UpcomingService }) {
   if (item.is_overdue) {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-danger/20 text-danger border border-danger/40">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-danger/10 text-danger border border-danger/40">
         &#9888; ÜBERFÄLLIG
       </span>
     )
@@ -23,14 +23,14 @@ function UrgencyBadge({ item }: { item: UpcomingService }) {
 
   if (daysSoon || kmSoon) {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-accent/20 text-accent border border-accent/40">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-accent/10 text-amber-700 border border-accent/40">
         &#9650; BALD FÄLLIG
       </span>
     )
   }
 
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-green-900/50 text-green-400 border border-green-700/50">
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-300">
       &#10003; OK
     </span>
   )
@@ -98,8 +98,8 @@ export default function Planning() {
     <div>
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Serviceplanung</h1>
-          <p className="text-slate-400 text-sm">
+          <h1 className="text-2xl font-bold text-slate-900">Serviceplanung</h1>
+          <p className="text-slate-500 text-sm">
             Nächste 60 Tage &middot; bis 1.000 km Puffer
           </p>
         </div>
@@ -149,7 +149,7 @@ export default function Planning() {
       {isLoading && (
         <div className="space-y-3 animate-pulse">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-24 bg-card rounded-xl border border-slate-700" />
+            <div key={i} className="h-24 bg-white rounded-xl border border-slate-200" />
           ))}
         </div>
       )}
@@ -157,7 +157,7 @@ export default function Planning() {
       {!isLoading && sorted.length === 0 && (
         <div className="text-center py-16">
           <div className="text-5xl mb-4">&#9989;</div>
-          <h2 className="text-xl font-semibold text-slate-300 mb-2">Alles im grünen Bereich</h2>
+          <h2 className="text-xl font-semibold text-slate-700 mb-2">Alles im grünen Bereich</h2>
           <p className="text-slate-500">
             Keine anstehenden Services in den nächsten 60 Tagen oder 1.000 km.
           </p>
@@ -168,13 +168,13 @@ export default function Planning() {
         {sorted.map((item) => {
           const photoUrl = getPhotoUrl(item.vehicle_photo_path)
           const borderColor = item.is_overdue
-            ? 'border-danger/50 hover:border-danger/70'
+            ? 'border-danger/40 hover:border-danger/60'
             : item.urgency_days !== undefined && item.urgency_days <= 14
             ? 'border-accent/40 hover:border-accent/60'
-            : 'border-slate-700 hover:border-slate-600'
+            : 'border-slate-200 hover:border-slate-300'
           const bgColor = item.is_overdue
             ? 'bg-danger/5'
-            : 'bg-card'
+            : 'bg-white'
 
           return (
             <div
@@ -187,10 +187,10 @@ export default function Planning() {
                   <img
                     src={photoUrl}
                     alt={item.vehicle_name}
-                    className="w-12 h-12 rounded-full object-cover border border-slate-700 flex-shrink-0"
+                    className="w-12 h-12 rounded-full object-cover border border-slate-200 flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0 border border-slate-600">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 border border-slate-200">
                     <span className="text-xl">&#128663;</span>
                   </div>
                 )}
@@ -199,24 +199,24 @@ export default function Planning() {
                   <div className="flex items-start flex-wrap gap-2 mb-1">
                     <Link
                       to={`/vehicles/${item.vehicle_id}`}
-                      className="text-slate-300 hover:text-accent text-sm font-medium transition-colors"
+                      className="text-slate-700 hover:text-accent text-sm font-medium transition-colors"
                     >
                       {item.vehicle_name}
                     </Link>
                     <UrgencyBadge item={item} />
                   </div>
 
-                  <p className="text-slate-100 font-semibold">{item.task_name}</p>
+                  <p className="text-slate-900 font-semibold">{item.task_name}</p>
 
-                  <div className="flex flex-wrap gap-4 mt-1 text-xs text-slate-400">
+                  <div className="flex flex-wrap gap-4 mt-1 text-xs text-slate-500">
                     {item.due_date && (
                       <span>
                         &#128197;{' '}
-                        <span className={item.is_overdue ? 'text-danger' : 'text-slate-300'}>
+                        <span className={item.is_overdue ? 'text-danger' : 'text-slate-700'}>
                           {new Date(item.due_date).toLocaleDateString('de-DE')}
                         </span>
                         {item.urgency_days !== undefined && (
-                          <span className="ml-1 text-slate-500">
+                          <span className="ml-1 text-slate-400">
                             ({item.urgency_days > 0 ? `in ${item.urgency_days} Tagen` : `${Math.abs(item.urgency_days)} Tage überfällig`})
                           </span>
                         )}
@@ -225,11 +225,11 @@ export default function Planning() {
                     {item.due_km && (
                       <span>
                         &#128207;{' '}
-                        <span className="font-mono text-slate-300">
+                        <span className="font-mono text-slate-700">
                           {item.due_km.toLocaleString('de-DE')} km
                         </span>
                         {item.urgency_km !== undefined && (
-                          <span className="ml-1 text-slate-500">
+                          <span className="ml-1 text-slate-400">
                             ({item.urgency_km > 0 ? `noch ${item.urgency_km.toLocaleString('de-DE')} km` : `${Math.abs(item.urgency_km).toLocaleString('de-DE')} km überfällig`})
                           </span>
                         )}
@@ -247,7 +247,7 @@ export default function Planning() {
                       })
                     }
                     disabled={statusMutation.isPending}
-                    className="bg-green-900/50 hover:bg-green-800/70 text-green-400 border border-green-700/50 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                    className="bg-green-50 hover:bg-green-100 text-green-700 border border-green-300 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
                     title="Als erledigt markieren"
                   >
                     &#10003; Erledigt
@@ -260,7 +260,7 @@ export default function Planning() {
                       })
                     }
                     disabled={statusMutation.isPending}
-                    className="bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-300 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
                     title="Überspringen"
                   >
                     &#8594; Überspringen

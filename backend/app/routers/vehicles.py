@@ -134,6 +134,34 @@ async def upload_photo(
     return vehicle
 
 
+@router.post("/{vehicle_id}/registration-doc", response_model=VehicleResponse)
+async def upload_registration_doc(
+    vehicle_id: int,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+):
+    vehicle = _get_vehicle_or_404(vehicle_id, db)
+    ext = _validate_image(file)
+
+    content = await file.read()
+    if len(content) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="File too large (max 10 MB)")
+
+    save_dir = Path(settings.upload_path) / "vehicles" / str(vehicle_id)
+    save_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"registration_doc{ext}"
+    save_path = save_dir / filename
+
+    with open(save_path, "wb") as f:
+        f.write(content)
+
+    relative_path = str(Path("vehicles") / str(vehicle_id) / filename)
+    vehicle.registration_doc_path = relative_path
+    db.commit()
+    db.refresh(vehicle)
+    return vehicle
+
+
 @router.get("/{vehicle_id}/photo")
 def get_photo(vehicle_id: int, db: Session = Depends(get_db)):
     vehicle = _get_vehicle_or_404(vehicle_id, db)

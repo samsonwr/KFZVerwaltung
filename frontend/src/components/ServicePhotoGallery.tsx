@@ -36,7 +36,7 @@ export default function ServicePhotoGallery({
 
   if (photos.length === 0) {
     return (
-      <p className="text-slate-500 text-sm italic">Keine Fotos vorhanden.</p>
+      <p className="text-slate-400 text-sm italic">Keine Fotos vorhanden.</p>
     )
   }
 
@@ -51,7 +51,7 @@ export default function ServicePhotoGallery({
                 <img
                   src={getPhotoUrl(photo)}
                   alt={`Foto ${i + 1}`}
-                  className="w-full h-24 object-cover rounded border border-slate-700 hover:border-accent/60 transition-colors cursor-pointer"
+                  className="w-full h-24 object-cover rounded border border-slate-200 hover:border-accent/60 transition-colors cursor-pointer"
                 />
               </a>
               <button
@@ -67,10 +67,10 @@ export default function ServicePhotoGallery({
       </div>
 
       {confirmDelete && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-card border border-slate-700 rounded-xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 className="text-slate-100 font-semibold mb-2">Foto löschen?</h3>
-            <p className="text-slate-400 text-sm mb-4 break-all">{confirmDelete}</p>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-slate-900 font-semibold mb-2">Foto löschen?</h3>
+            <p className="text-slate-500 text-sm mb-4 break-all">{confirmDelete}</p>
             <div className="flex gap-3">
               <button
                 onClick={() => deleteMutation.mutate(confirmDelete)}

@@ -57,7 +57,7 @@ export default function KmUpdateInput({ vehicleId, currentKm }: KmUpdateInputPro
         onBlur={commit}
         onKeyDown={handleKeyDown}
         disabled={saving}
-        className="w-32 font-mono text-accent bg-surface border border-accent/60 rounded px-2 py-0.5 text-sm focus:outline-none focus:border-accent"
+        className="w-32 font-mono text-accent bg-white border border-accent/60 rounded px-2 py-0.5 text-sm focus:outline-none focus:border-accent"
       />
     )
   }
@@ -66,7 +66,7 @@ export default function KmUpdateInput({ vehicleId, currentKm }: KmUpdateInputPro
     <button
       onClick={startEdit}
       title="Klicken zum Bearbeiten"
-      className="font-mono text-accent hover:text-amber-300 transition-colors text-sm flex items-center gap-1 group"
+      className="font-mono text-accent hover:text-amber-600 transition-colors text-sm flex items-center gap-1 group"
     >
       {currentKm.toLocaleString('de-DE')} km
       <span className="opacity-0 group-hover:opacity-60 text-xs">&#9998;</span>

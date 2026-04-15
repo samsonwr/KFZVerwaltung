@@ -8,6 +8,20 @@ export interface Vehicle {
   license_plate?: string
   current_km: number
   photo_path?: string
+  registration_doc_path?: string
+  // Zusätzliche Felder
+  key_number?: string
+  fuel_type?: string
+  engine_oil_type?: string
+  engine_oil_capacity?: number
+  gearbox_oil_type?: string
+  gearbox_oil_capacity?: number
+  coolant_type?: string
+  coolant_capacity?: number
+  brake_fluid_type?: string
+  tire_size_summer?: string
+  tire_size_winter?: string
+  next_inspection_date?: string
 }
 
 export interface MaintenancePlan {

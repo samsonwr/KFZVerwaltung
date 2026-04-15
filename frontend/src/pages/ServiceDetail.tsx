@@ -215,8 +215,8 @@ export default function ServiceDetail() {
   if (isLoading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-8 bg-card rounded w-1/3" />
-        <div className="h-48 bg-card rounded-xl border border-slate-700" />
+        <div className="h-8 bg-slate-100 rounded w-1/3" />
+        <div className="h-48 bg-white rounded-xl border border-slate-200" />
       </div>
     )
   }
@@ -235,12 +235,12 @@ export default function ServiceDetail() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate(-1)} className="text-slate-400 hover:text-slate-100 transition-colors">
+        <button onClick={() => navigate(-1)} className="text-slate-500 hover:text-slate-900 transition-colors">
           &#8592;
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Service-Detail</h1>
-          <p className="text-slate-400 text-sm">
+          <h1 className="text-2xl font-bold text-slate-900">Service-Detail</h1>
+          <p className="text-slate-500 text-sm">
             {new Date(service.date).toLocaleDateString('de-DE', {
               weekday: 'long',
               day: '2-digit',
@@ -262,8 +262,8 @@ export default function ServiceDetail() {
       </div>
 
       {editing ? (
-        <div className="bg-card border border-accent/30 rounded-xl p-6 mb-6">
-          <h2 className="text-slate-100 font-semibold mb-4">Eintrag bearbeiten</h2>
+        <div className="bg-white border border-accent/30 rounded-xl p-6 mb-6 shadow-sm">
+          <h2 className="text-slate-900 font-semibold mb-4">Eintrag bearbeiten</h2>
           <EditForm
             service={service}
             onCancel={() => setEditing(false)}
@@ -273,39 +273,39 @@ export default function ServiceDetail() {
       ) : (
         <>
           {/* Main Info */}
-          <div className="bg-card border border-slate-700 rounded-xl p-6 mb-4">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 mb-4 shadow-sm">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div>
-                <p className="text-slate-500 text-xs uppercase tracking-wide">Datum</p>
-                <p className="text-slate-100 font-medium">
+                <p className="text-slate-400 text-xs uppercase tracking-wide">Datum</p>
+                <p className="text-slate-900 font-medium">
                   {new Date(service.date).toLocaleDateString('de-DE')}
                 </p>
               </div>
               <div>
-                <p className="text-slate-500 text-xs uppercase tracking-wide">Kilometerstand</p>
+                <p className="text-slate-400 text-xs uppercase tracking-wide">Kilometerstand</p>
                 <p className="font-mono text-accent font-semibold">
                   {service.km_at_service.toLocaleString('de-DE')} km
                 </p>
               </div>
               <div>
-                <p className="text-slate-500 text-xs uppercase tracking-wide">Gesamtkosten</p>
+                <p className="text-slate-400 text-xs uppercase tracking-wide">Gesamtkosten</p>
                 <p className="text-accent font-bold text-lg">
                   {service.total_cost.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                 </p>
               </div>
               <div>
-                <p className="text-slate-500 text-xs uppercase tracking-wide">Fotos</p>
-                <p className="text-slate-300">{service.photos.length}</p>
+                <p className="text-slate-400 text-xs uppercase tracking-wide">Fotos</p>
+                <p className="text-slate-700">{service.photos.length}</p>
               </div>
             </div>
 
             {/* Tasks */}
             {service.tasks.length > 0 && (
               <div className="mb-4">
-                <p className="text-slate-500 text-xs uppercase tracking-wide mb-2">Durchgeführte Arbeiten</p>
+                <p className="text-slate-400 text-xs uppercase tracking-wide mb-2">Durchgeführte Arbeiten</p>
                 <div className="flex flex-wrap gap-2">
                   {service.tasks.map((t, i) => (
-                    <span key={i} className="bg-slate-700 text-slate-200 text-sm px-3 py-1 rounded-full">
+                    <span key={i} className="bg-slate-100 text-slate-700 text-sm px-3 py-1 rounded-full border border-slate-200">
                       {t}
                     </span>
                   ))}
@@ -316,19 +316,19 @@ export default function ServiceDetail() {
             {/* Parts */}
             {service.parts_used.length > 0 && (
               <div className="mb-4">
-                <p className="text-slate-500 text-xs uppercase tracking-wide mb-2">Verwendete Teile</p>
-                <div className="bg-surface rounded-lg overflow-hidden border border-slate-700">
+                <p className="text-slate-400 text-xs uppercase tracking-wide mb-2">Verwendete Teile</p>
+                <div className="bg-surface rounded-lg overflow-hidden border border-slate-200">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-slate-700 text-slate-400 text-xs">
+                      <tr className="border-b border-slate-200 text-slate-500 text-xs">
                         <th className="text-left px-4 py-2">Teil</th>
                         <th className="text-right px-4 py-2">Kosten</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-700/50">
+                    <tbody className="divide-y divide-slate-100">
                       {service.parts_used.map((p, i) => (
                         <tr key={i}>
-                          <td className="px-4 py-2 text-slate-300">{p.name}</td>
+                          <td className="px-4 py-2 text-slate-700">{p.name}</td>
                           <td className="px-4 py-2 text-right font-mono text-accent">
                             {p.cost.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                           </td>
@@ -336,8 +336,8 @@ export default function ServiceDetail() {
                       ))}
                     </tbody>
                     <tfoot>
-                      <tr className="border-t border-slate-700 font-semibold">
-                        <td className="px-4 py-2 text-slate-300">Gesamt</td>
+                      <tr className="border-t border-slate-200 font-semibold">
+                        <td className="px-4 py-2 text-slate-700">Gesamt</td>
                         <td className="px-4 py-2 text-right font-mono text-accent">
                           {service.total_cost.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                         </td>
@@ -350,16 +350,16 @@ export default function ServiceDetail() {
 
             {service.notes && (
               <div>
-                <p className="text-slate-500 text-xs uppercase tracking-wide mb-1">Notizen</p>
-                <p className="text-slate-300 text-sm whitespace-pre-wrap">{service.notes}</p>
+                <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">Notizen</p>
+                <p className="text-slate-700 text-sm whitespace-pre-wrap">{service.notes}</p>
               </div>
             )}
           </div>
 
           {/* Photos */}
-          <div className="bg-card border border-slate-700 rounded-xl p-6">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-slate-100 font-semibold">Fotos</h2>
+              <h2 className="text-slate-900 font-semibold">Fotos</h2>
               <button
                 onClick={() => setAddingPhotos(!addingPhotos)}
                 className="btn-secondary text-sm"
@@ -396,7 +396,7 @@ export default function ServiceDetail() {
           <div className="mt-4">
             <Link
               to={`/vehicles/${service.vehicle_id}`}
-              className="text-slate-400 hover:text-accent transition-colors text-sm"
+              className="text-slate-500 hover:text-accent transition-colors text-sm"
             >
               &#8592; Zum Fahrzeug
             </Link>
@@ -406,10 +406,10 @@ export default function ServiceDetail() {
 
       {/* Delete Confirm */}
       {confirmDelete && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-card border border-slate-700 rounded-xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 className="text-slate-100 font-semibold mb-2">Service-Eintrag löschen?</h3>
-            <p className="text-slate-400 text-sm mb-4">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-slate-900 font-semibold mb-2">Service-Eintrag löschen?</h3>
+            <p className="text-slate-500 text-sm mb-4">
               Dieser Service-Eintrag und alle zugehörigen Fotos werden unwiderruflich gelöscht.
             </p>
             <div className="flex gap-3">

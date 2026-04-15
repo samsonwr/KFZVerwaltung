@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom'
 
 function SkeletonCard() {
   return (
-    <div className="bg-card border border-slate-700 rounded-xl p-4 animate-pulse">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 animate-pulse">
       <div className="flex gap-4">
-        <div className="w-16 h-16 rounded-full bg-slate-700" />
+        <div className="w-16 h-16 rounded-full bg-slate-100" />
         <div className="flex-1 space-y-3">
-          <div className="h-5 bg-slate-700 rounded w-1/2" />
-          <div className="h-4 bg-slate-700 rounded w-1/3" />
-          <div className="h-4 bg-slate-700 rounded w-2/3" />
+          <div className="h-5 bg-slate-100 rounded w-1/2" />
+          <div className="h-4 bg-slate-100 rounded w-1/3" />
+          <div className="h-4 bg-slate-100 rounded w-2/3" />
         </div>
       </div>
     </div>
@@ -29,8 +29,8 @@ export default function Dashboard() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Dashboard</h1>
-          <p className="text-slate-400 text-sm mt-0.5">Übersicht aller Fahrzeuge</p>
+          <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+          <p className="text-slate-500 text-sm mt-0.5">Übersicht aller Fahrzeuge</p>
         </div>
         <div className="flex gap-2">
           <Link
@@ -85,7 +85,7 @@ export default function Dashboard() {
       {data && data.vehicles.length === 0 && (
         <div className="text-center py-16">
           <div className="text-6xl mb-4">&#128663;</div>
-          <h2 className="text-xl font-semibold text-slate-300 mb-2">Keine Fahrzeuge</h2>
+          <h2 className="text-xl font-semibold text-slate-700 mb-2">Keine Fahrzeuge</h2>
           <p className="text-slate-500 mb-6">Füge dein erstes Fahrzeug hinzu, um loszulegen.</p>
           <Link to="/vehicles" className="btn-accent">
             + Erstes Fahrzeug hinzufügen

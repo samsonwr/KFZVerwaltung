@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        surface: '#0f172a',
-        card: '#1e293b',
+        surface: '#f1f5f9',
+        card: '#ffffff',
         accent: '#f59e0b',
         danger: '#ef4444',
         warn: '#f97316',

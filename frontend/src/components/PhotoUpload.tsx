@@ -46,12 +46,12 @@ export default function PhotoUpload({ onUpload, label = 'Fotos hochladen' }: Pho
         className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
           dragging
             ? 'border-accent bg-accent/10'
-            : 'border-slate-600 hover:border-accent/60 hover:bg-slate-800/50'
+            : 'border-slate-300 hover:border-accent/60 hover:bg-slate-50'
         }`}
       >
-        <div className="text-3xl mb-2 text-slate-500">&#128247;</div>
-        <p className="text-slate-400 text-sm">{label}</p>
-        <p className="text-slate-600 text-xs mt-1">JPG, PNG, WebP &ndash; Drag &amp; Drop oder klicken</p>
+        <div className="text-3xl mb-2 text-slate-400">&#128247;</div>
+        <p className="text-slate-500 text-sm">{label}</p>
+        <p className="text-slate-400 text-xs mt-1">JPG, PNG, WebP &ndash; Drag &amp; Drop oder klicken</p>
         <input
           ref={inputRef}
           type="file"
@@ -69,7 +69,7 @@ export default function PhotoUpload({ onUpload, label = 'Fotos hochladen' }: Pho
               <img
                 src={p.url}
                 alt={p.name}
-                className="w-full h-20 object-cover rounded border border-slate-700"
+                className="w-full h-20 object-cover rounded border border-slate-200"
               />
               <button
                 type="button"
@@ -78,7 +78,7 @@ export default function PhotoUpload({ onUpload, label = 'Fotos hochladen' }: Pho
               >
                 &#215;
               </button>
-              <p className="text-xs text-slate-500 truncate mt-0.5">{p.name}</p>
+              <p className="text-xs text-slate-400 truncate mt-0.5">{p.name}</p>
             </div>
           ))}
         </div>

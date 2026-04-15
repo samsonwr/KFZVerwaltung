@@ -57,20 +57,47 @@ export default function ServiceNew() {
   const tasksArray = useFieldArray({ control, name: 'tasks' })
   const partsArray = useFieldArray({ control, name: 'parts_used' })
   const watchedParts = watch('parts_used')
+  const watchedVehicleId = watch('vehicle_id')
 
   const totalCost = (watchedParts ?? []).reduce((sum, p) => {
     const c = parseFloat(String(p.cost))
     return sum + (isNaN(c) ? 0 : c)
   }, 0)
 
+  // Wartungspläne für gewähltes Fahrzeug laden
+  const { data: maintenancePlans = [] } = useQuery({
+    queryKey: ['plans', Number(watchedVehicleId)],
+    queryFn: () => api.maintenancePlans.getByVehicle(Number(watchedVehicleId)),
+    enabled: !!watchedVehicleId && !isNaN(Number(watchedVehicleId)),
+  })
+
   // Pre-fill km when vehicle changes
-  const watchedVehicleId = watch('vehicle_id')
   useEffect(() => {
     if (watchedVehicleId) {
       const v = vehicles.find((x) => x.id === Number(watchedVehicleId))
       if (v) setValue('km_at_service', v.current_km)
     }
   }, [watchedVehicleId, vehicles, setValue])
+
+  function applyMaintenancePlan(planId: string) {
+    if (!planId) return
+    const plan = maintenancePlans.find((p) => String(p.id) === planId)
+    if (!plan) return
+    // Aktuelle Tasks holen und Wartungsplan-Task hinzufügen (wenn nicht schon vorhanden)
+    const currentTasks = tasksArray.fields.map((f) => (f as { value: string }).value)
+    const alreadyExists = currentTasks.some(
+      (t) => t.toLowerCase().trim() === plan.task_name.toLowerCase().trim()
+    )
+    if (!alreadyExists) {
+      // Leere erste Task durch Wartungsplan ersetzen, oder anhängen
+      const firstEmpty = tasksArray.fields.findIndex((f) => !(f as { value: string }).value.trim())
+      if (firstEmpty >= 0) {
+        setValue(`tasks.${firstEmpty}.value`, plan.task_name)
+      } else {
+        tasksArray.append({ value: plan.task_name })
+      }
+    }
+  }
 
   async function onSubmit(data: ServiceFormData) {
     setServerError('')
@@ -105,13 +132,13 @@ export default function ServiceNew() {
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={() => navigate(-1)}
-          className="text-slate-400 hover:text-slate-100 transition-colors"
+          className="text-slate-500 hover:text-slate-900 transition-colors"
         >
           &#8592;
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Service erfassen</h1>
-          <p className="text-slate-400 text-sm">Neuen Serviceeintrag anlegen</p>
+          <h1 className="text-2xl font-bold text-slate-900">Service erfassen</h1>
+          <p className="text-slate-500 text-sm">Neuen Serviceeintrag anlegen</p>
         </div>
       </div>
 
@@ -123,8 +150,8 @@ export default function ServiceNew() {
         )}
 
         {/* Basic Info */}
-        <div className="bg-card border border-slate-700 rounded-xl p-6 space-y-4">
-          <h2 className="text-slate-100 font-semibold">Grunddaten</h2>
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4 shadow-sm">
+          <h2 className="text-slate-900 font-semibold">Grunddaten</h2>
 
           <div>
             <label className="form-label">Fahrzeug *</label>
@@ -151,6 +178,30 @@ export default function ServiceNew() {
             />
             {errors.vehicle_id && <p className="form-error">{errors.vehicle_id.message}</p>}
           </div>
+
+          {/* Wartungsplan übernehmen */}
+          {watchedVehicleId && maintenancePlans.length > 0 && (
+            <div>
+              <label className="form-label">Aus Wartungsplan übernehmen</label>
+              <select
+                className="form-input"
+                defaultValue=""
+                onChange={(e) => applyMaintenancePlan(e.target.value)}
+              >
+                <option value="">Wartungsplan auswählen (optional)…</option>
+                {maintenancePlans.map((plan) => (
+                  <option key={plan.id} value={plan.id}>
+                    {plan.task_name}
+                    {plan.interval_km ? ` – alle ${plan.interval_km.toLocaleString('de-DE')} km` : ''}
+                    {plan.interval_days ? ` – alle ${plan.interval_days} Tage` : ''}
+                  </option>
+                ))}
+              </select>
+              <p className="text-slate-400 text-xs mt-1">
+                Tätigkeit wird automatisch in die Arbeitsliste übernommen
+              </p>
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -180,9 +231,9 @@ export default function ServiceNew() {
         </div>
 
         {/* Tasks */}
-        <div className="bg-card border border-slate-700 rounded-xl p-6 space-y-3">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="text-slate-100 font-semibold">Durchgeführte Arbeiten</h2>
+            <h2 className="text-slate-900 font-semibold">Durchgeführte Arbeiten</h2>
             <button
               type="button"
               onClick={() => tasksArray.append({ value: '' })}
@@ -193,7 +244,7 @@ export default function ServiceNew() {
           </div>
 
           {tasksArray.fields.length === 0 && (
-            <p className="text-slate-500 text-sm italic">Noch keine Arbeiten erfasst.</p>
+            <p className="text-slate-400 text-sm italic">Noch keine Arbeiten erfasst.</p>
           )}
 
           {tasksArray.fields.map((field, idx) => (
@@ -215,9 +266,9 @@ export default function ServiceNew() {
         </div>
 
         {/* Parts & Costs */}
-        <div className="bg-card border border-slate-700 rounded-xl p-6 space-y-3">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-3 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="text-slate-100 font-semibold">Verwendete Teile &amp; Kosten</h2>
+            <h2 className="text-slate-900 font-semibold">Verwendete Teile &amp; Kosten</h2>
             <button
               type="button"
               onClick={() => partsArray.append({ name: '', cost: 0 })}
@@ -228,7 +279,7 @@ export default function ServiceNew() {
           </div>
 
           {partsArray.fields.length === 0 && (
-            <p className="text-slate-500 text-sm italic">Noch keine Teile erfasst.</p>
+            <p className="text-slate-400 text-sm italic">Noch keine Teile erfasst.</p>
           )}
 
           {partsArray.fields.map((field, idx) => (
@@ -255,7 +306,7 @@ export default function ServiceNew() {
             </div>
           ))}
 
-          <div className="flex justify-end pt-2 border-t border-slate-700">
+          <div className="flex justify-end pt-2 border-t border-slate-200">
             <div className="text-right">
               <p className="text-slate-400 text-xs uppercase tracking-wide">Gesamtkosten</p>
               <p className="text-accent font-bold text-xl font-mono">
@@ -266,7 +317,7 @@ export default function ServiceNew() {
         </div>
 
         {/* Notes */}
-        <div className="bg-card border border-slate-700 rounded-xl p-6">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <label className="form-label">Notizen</label>
           <textarea
             {...register('notes')}
@@ -277,8 +328,8 @@ export default function ServiceNew() {
         </div>
 
         {/* Photos */}
-        <div className="bg-card border border-slate-700 rounded-xl p-6">
-          <h2 className="text-slate-100 font-semibold mb-3">Fotos</h2>
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <h2 className="text-slate-900 font-semibold mb-3">Fotos</h2>
           <PhotoUpload
             onUpload={(files) => setPhotoFiles((prev) => [...prev, ...files])}
             label="Service-Fotos hochladen"

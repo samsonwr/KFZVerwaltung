@@ -1,5 +1,5 @@
 from typing import Optional, List, TYPE_CHECKING
-from sqlalchemy import Integer, String
+from sqlalchemy import Integer, String, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
@@ -22,6 +22,21 @@ class Vehicle(Base):
     license_plate: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     current_km: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     photo_path: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    # Zusätzliche Fahrzeugdaten
+    key_number: Mapped[Optional[str]] = mapped_column(String, nullable=True)          # Schlüsselnummer (HSN/TSN)
+    fuel_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)           # Kraftstoffart
+    engine_oil_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)     # Motoröl Typ
+    engine_oil_capacity: Mapped[Optional[float]] = mapped_column(Float, nullable=True)  # Motoröl Menge (L)
+    gearbox_oil_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)    # Getriebeöl Typ
+    gearbox_oil_capacity: Mapped[Optional[float]] = mapped_column(Float, nullable=True) # Getriebeöl Menge (L)
+    coolant_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)        # Kühlmittel Typ
+    coolant_capacity: Mapped[Optional[float]] = mapped_column(Float, nullable=True)   # Kühlmittel Menge (L)
+    brake_fluid_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)    # Bremsflüssigkeit Typ
+    tire_size_summer: Mapped[Optional[str]] = mapped_column(String, nullable=True)    # Reifengröße Sommer
+    tire_size_winter: Mapped[Optional[str]] = mapped_column(String, nullable=True)    # Reifengröße Winter
+    next_inspection_date: Mapped[Optional[str]] = mapped_column(String, nullable=True) # Nächste HU (ISO-Datum)
+    registration_doc_path: Mapped[Optional[str]] = mapped_column(String, nullable=True) # Fahrzeugschein-Foto
 
     maintenance_plans: Mapped[List["MaintenancePlan"]] = relationship(
         "MaintenancePlan",

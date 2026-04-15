@@ -177,13 +177,13 @@ export default function MaintenancePlans() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <Link to={`/vehicles/${id}`} className="text-slate-400 hover:text-slate-100 transition-colors">
+        <Link to={`/vehicles/${id}`} className="text-slate-500 hover:text-slate-900 transition-colors">
           &#8592;
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Wartungspläne</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Wartungspläne</h1>
           {vehicle && (
-            <p className="text-slate-400 text-sm">{vehicle.name} &middot; {vehicle.make} {vehicle.model}</p>
+            <p className="text-slate-500 text-sm">{vehicle.name} &middot; {vehicle.make} {vehicle.model}</p>
           )}
         </div>
         <button
@@ -202,8 +202,8 @@ export default function MaintenancePlans() {
 
       {/* Inline Form */}
       {showForm && !editPlan && (
-        <div className="bg-card border border-accent/30 rounded-xl p-6 mb-4">
-          <h3 className="text-slate-100 font-semibold mb-4">Neuer Wartungsplan</h3>
+        <div className="bg-white border border-accent/30 rounded-xl p-6 mb-4 shadow-sm">
+          <h3 className="text-slate-900 font-semibold mb-4">Neuer Wartungsplan</h3>
           <PlanForm
             vehicleId={id}
             onSuccess={() => setShowForm(false)}
@@ -214,14 +214,14 @@ export default function MaintenancePlans() {
 
       {isLoading && (
         <div className="space-y-2 animate-pulse">
-          {[1, 2, 3].map(i => <div key={i} className="h-24 bg-card rounded-xl border border-slate-700" />)}
+          {[1, 2, 3].map(i => <div key={i} className="h-24 bg-white rounded-xl border border-slate-200" />)}
         </div>
       )}
 
       {!isLoading && plans.length === 0 && !showForm && (
         <div className="text-center py-12">
           <div className="text-4xl mb-3">&#128197;</div>
-          <p className="text-slate-400 mb-4">Noch keine Wartungspläne für dieses Fahrzeug.</p>
+          <p className="text-slate-500 mb-4">Noch keine Wartungspläne für dieses Fahrzeug.</p>
           <button onClick={() => setShowForm(true)} className="btn-accent">
             + Ersten Plan anlegen
           </button>
@@ -232,8 +232,8 @@ export default function MaintenancePlans() {
         {plans.map((plan) => (
           <div key={plan.id}>
             {editPlan?.id === plan.id ? (
-              <div className="bg-card border border-accent/30 rounded-xl p-6">
-                <h3 className="text-slate-100 font-semibold mb-4">Plan bearbeiten</h3>
+              <div className="bg-white border border-accent/30 rounded-xl p-6 shadow-sm">
+                <h3 className="text-slate-900 font-semibold mb-4">Plan bearbeiten</h3>
                 <PlanForm
                   plan={plan}
                   vehicleId={id}
@@ -242,14 +242,14 @@ export default function MaintenancePlans() {
                 />
               </div>
             ) : (
-              <div className="bg-card border border-slate-700 rounded-xl p-4">
+              <div className="bg-white border border-slate-200 rounded-xl p-4 hover:shadow-sm transition-shadow">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <p className="text-slate-100 font-semibold">{plan.task_name}</p>
+                    <p className="text-slate-900 font-semibold">{plan.task_name}</p>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2 text-sm">
                       {plan.interval_km && (
                         <div>
-                          <p className="text-slate-500 text-xs">Intervall km</p>
+                          <p className="text-slate-400 text-xs">Intervall km</p>
                           <p className="font-mono text-accent">
                             {plan.interval_km.toLocaleString('de-DE')} km
                           </p>
@@ -257,29 +257,29 @@ export default function MaintenancePlans() {
                       )}
                       {plan.interval_days && (
                         <div>
-                          <p className="text-slate-500 text-xs">Intervall Zeit</p>
-                          <p className="text-slate-300">{plan.interval_days} Tage</p>
+                          <p className="text-slate-400 text-xs">Intervall Zeit</p>
+                          <p className="text-slate-700">{plan.interval_days} Tage</p>
                         </div>
                       )}
                       {plan.last_done_km && (
                         <div>
-                          <p className="text-slate-500 text-xs">Zuletzt bei</p>
-                          <p className="font-mono text-slate-300">
+                          <p className="text-slate-400 text-xs">Zuletzt bei</p>
+                          <p className="font-mono text-slate-700">
                             {plan.last_done_km.toLocaleString('de-DE')} km
                           </p>
                         </div>
                       )}
                       {plan.last_done_date && (
                         <div>
-                          <p className="text-slate-500 text-xs">Zuletzt am</p>
-                          <p className="text-slate-300">
+                          <p className="text-slate-400 text-xs">Zuletzt am</p>
+                          <p className="text-slate-700">
                             {new Date(plan.last_done_date).toLocaleDateString('de-DE')}
                           </p>
                         </div>
                       )}
                     </div>
                     {plan.notes && (
-                      <p className="text-slate-500 text-xs mt-2 italic">{plan.notes}</p>
+                      <p className="text-slate-400 text-xs mt-2 italic">{plan.notes}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
@@ -306,11 +306,11 @@ export default function MaintenancePlans() {
       </div>
 
       {deletePlan && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-card border border-slate-700 rounded-xl p-6 max-w-sm w-full shadow-2xl">
-            <h3 className="text-slate-100 font-semibold mb-2">Wartungsplan löschen?</h3>
-            <p className="text-slate-400 text-sm mb-4">
-              <span className="text-slate-200">{deletePlan.task_name}</span> wird unwiderruflich gelöscht.
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-slate-900 font-semibold mb-2">Wartungsplan löschen?</h3>
+            <p className="text-slate-500 text-sm mb-4">
+              <span className="text-slate-800">{deletePlan.task_name}</span> wird unwiderruflich gelöscht.
             </p>
             <div className="flex gap-3">
               <button
