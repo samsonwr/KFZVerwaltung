@@ -38,9 +38,10 @@ async def lifespan(app: FastAPI):
     Path(settings.backup_path).mkdir(parents=True, exist_ok=True)
     Path(settings.db_path).parent.mkdir(parents=True, exist_ok=True)
 
-    # Alembic-Migrationen automatisch beim Start ausführen
-    alembic_cfg = AlembicConfig(str(Path(__file__).parent.parent / "alembic.ini"))
+    # Alembic-Migrationen automatisch beim Start ausführen (gleiche DB wie die App)
+    alembic_cfg = AlembicConfig()
     alembic_cfg.set_main_option("script_location", str(Path(__file__).parent.parent / "alembic"))
+    alembic_cfg.set_main_option("sqlalchemy.url", str(engine.url))
     alembic_command.upgrade(alembic_cfg, "head")
 
     # Fallback: Tabellen anlegen falls noch keine Migration-History vorhanden
