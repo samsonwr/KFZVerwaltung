@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from alembic.config import Config as AlembicConfig
+from alembic import command as alembic_command
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -36,7 +38,12 @@ async def lifespan(app: FastAPI):
     Path(settings.backup_path).mkdir(parents=True, exist_ok=True)
     Path(settings.db_path).parent.mkdir(parents=True, exist_ok=True)
 
-    # Create database tables (if not using Alembic migrations)
+    # Alembic-Migrationen automatisch beim Start ausführen
+    alembic_cfg = AlembicConfig(str(Path(__file__).parent.parent / "alembic.ini"))
+    alembic_cfg.set_main_option("script_location", str(Path(__file__).parent.parent / "alembic"))
+    alembic_command.upgrade(alembic_cfg, "head")
+
+    # Fallback: Tabellen anlegen falls noch keine Migration-History vorhanden
     Base.metadata.create_all(bind=engine)
 
     # Start background scheduler
